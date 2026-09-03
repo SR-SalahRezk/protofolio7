@@ -1,164 +1,120 @@
 /* =========================
-   SCROLL REVEAL SETTINGS
+   MENU
 ========================= */
 
-ScrollReveal({
-  distance: "80px",
+const menuIcon = document.querySelector("#menu-icon");
+const navbar = document.querySelector(".navbar");
 
-  duration: 1600,
+if (menuIcon && navbar) {
+  menuIcon.onclick = () => {
+    menuIcon.classList.toggle("bx-x");
 
-  delay: 150,
-
-  reset: false,
-
-  easing: "cubic-bezier(0.5, 0, 0, 1)",
-});
-
-/* =========================
-   HOME ANIMATIONS
-========================= */
-
-ScrollReveal().reveal(".developer-tag, .home-content h3", {
-  origin: "top",
-  interval: 150,
-});
-
-ScrollReveal().reveal(".home-content h1", {
-  origin: "left",
-  delay: 300,
-});
-
-ScrollReveal().reveal(".home-content p", {
-  origin: "left",
-  delay: 450,
-});
-
-ScrollReveal().reveal(".home-buttons", {
-  origin: "bottom",
-  delay: 550,
-});
-
-ScrollReveal().reveal(".social-media", {
-  origin: "bottom",
-  delay: 650,
-});
-
-ScrollReveal().reveal(".home-img", {
-  origin: "right",
-  distance: "100px",
-  delay: 300,
-});
-
-/* =========================
-   ABOUT
-========================= */
-
-ScrollReveal().reveal(".about-img", {
-  origin: "left",
-});
-
-ScrollReveal().reveal(".about-content", {
-  origin: "right",
-});
-
-/* =========================
-   EDUCATION
-========================= */
-
-ScrollReveal().reveal(".timeline-item", {
-  origin: "bottom",
-  interval: 200,
-});
-
-/* =========================
-   SKILLS
-========================= */
-
-ScrollReveal().reveal(".skill", {
-  origin: "bottom",
-  interval: 150,
-});
-
-/* =========================
-   SERVICES
-========================= */
-
-ScrollReveal().reveal(".services-box", {
-  origin: "bottom",
-  interval: 200,
-});
-
-/* =========================
-   PROJECTS
-========================= */
-
-ScrollReveal().reveal(".works-box", {
-  origin: "bottom",
-  interval: 200,
-});
-
-/* =========================
-   CONTACT
-========================= */
-
-ScrollReveal().reveal(".contact form", {
-  origin: "bottom",
-});
-
-/* =========================
-   SKILL BAR ANIMATION
-========================= */
-
-const skillsSection = document.querySelector(".skills");
-
-const skillObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const fills = document.querySelectorAll(".fill");
-
-        fills.forEach((fill) => {
-          const width = fill.getAttribute("data-width");
-
-          fill.style.width = width;
-        });
-
-        skillObserver.unobserve(entry.target);
-      }
-    });
-  },
-
-  {
-    threshold: 0.3,
-  },
-);
-
-if (skillsSection) {
-  skillObserver.observe(skillsSection);
+    navbar.classList.toggle("active");
+  };
 }
 
 /* =========================
-   HERO PARALLAX EFFECT
+   CLOSE MENU AFTER CLICK
 ========================= */
 
-const homeImage = document.querySelector(".home-img");
+const navLinks = document.querySelectorAll(".navbar a");
 
-document.addEventListener("mousemove", (event) => {
-  if (!homeImage) return;
+navLinks.forEach((link) => {
+  link.addEventListener("click", () => {
+    if (menuIcon) {
+      menuIcon.classList.remove("bx-x");
+    }
 
-  const x = (window.innerWidth / 2 - event.clientX) / 70;
-
-  const y = (window.innerHeight / 2 - event.clientY) / 70;
-
-  homeImage.style.transform = `translate(${x}px, ${y}px)`;
+    if (navbar) {
+      navbar.classList.remove("active");
+    }
+  });
 });
 
 /* =========================
-   RESET IMAGE POSITION
+   STICKY HEADER
 ========================= */
 
-document.addEventListener("mouseleave", () => {
-  if (homeImage) {
-    homeImage.style.transform = "translate(0, 0)";
+const header = document.querySelector(".header");
+
+window.addEventListener("scroll", () => {
+  if (header) {
+    header.classList.toggle("sticky", window.scrollY > 80);
   }
+});
+
+/* =========================
+   ACTIVE NAVIGATION
+========================= */
+
+const sections = document.querySelectorAll("section");
+
+window.addEventListener("scroll", () => {
+  let current = "";
+
+  sections.forEach((section) => {
+    const sectionTop = section.offsetTop - 200;
+
+    const sectionHeight = section.offsetHeight;
+
+    const sectionId = section.getAttribute("id");
+
+    if (
+      window.scrollY >= sectionTop &&
+      window.scrollY < sectionTop + sectionHeight
+    ) {
+      current = sectionId;
+    }
+  });
+
+  navLinks.forEach((link) => {
+    link.classList.remove("active");
+
+    if (link.getAttribute("href") === `#${current}`) {
+      link.classList.add("active");
+    }
+  });
+});
+
+/* =========================
+   TYPED JS
+========================= */
+
+if (document.querySelector(".multiple-text")) {
+  new Typed(".multiple-text", {
+    strings: [
+      "Frontend Developer",
+      "React Developer",
+      "Backend Developer",
+      "Full Stack Developer",
+    ],
+
+    typeSpeed: 80,
+
+    backSpeed: 50,
+
+    backDelay: 1500,
+
+    loop: true,
+  });
+}
+
+/* =========================
+   SMOOTH NAV EFFECT
+========================= */
+
+document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+  anchor.addEventListener("click", function (event) {
+    const target = document.querySelector(this.getAttribute("href"));
+
+    if (target) {
+      event.preventDefault();
+
+      target.scrollIntoView({
+        behavior: "smooth",
+
+        block: "start",
+      });
+    }
+  });
 });
