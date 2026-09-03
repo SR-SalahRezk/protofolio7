@@ -1,44 +1,109 @@
-// scroll sections active link
+/* =========================
+   MENU
+========================= */
 
-let sections = document.querySelectorAll('section');
-let navLinks = document.querySelectorAll('header nav a');
+const menuIcon = document.querySelector("#menu-icon");
+const navbar = document.querySelector(".navbar");
 
-window.onscroll = () => {
-    sections.forEach(sec => {
-        let top = window.scrollY;
-        let offset = sec.offsetTop - 150;
-        let height = sec.offsetHeight;
-        let id = sec.getAttribute('id');
+menuIcon.onclick = () => {
+  menuIcon.classList.toggle("bx-x");
 
-        if(top >= offset && top < offset + height) {
-            navLinks.forEach(links => {
-                links.classList.remove('active');
-                document.querySelector('header nav a[href*=' + id + ']').classList.add('active');  //hope this works ; )
-            });
-        };
-    });
+  navbar.classList.toggle("active");
 };
 
-// scroll reveal
+/* =========================
+   CLOSE MENU AFTER CLICK
+========================= */
 
-ScrollReveal({
-    // reset: true,
-    distance: '80px',
-    duration: 2000,
-    delay: 200
+const navLinks = document.querySelectorAll(".navbar a");
+
+navLinks.forEach((link) => {
+  link.addEventListener("click", () => {
+    menuIcon.classList.remove("bx-x");
+
+    navbar.classList.remove("active");
+  });
 });
 
-ScrollReveal().reveal('.home-content, .heading', { origin: 'top' })
-ScrollReveal().reveal('.home-img, .services-container, .works-box, .contact form', { origin: 'bottom' })
-ScrollReveal().reveal('.home-content h1, .about-img', { origin: 'left' })
-ScrollReveal().reveal('.home-content p, .about-content', { origin: 'right' })
+/* =========================
+   STICKY HEADER
+========================= */
 
-//typed js
+const header = document.querySelector(".header");
 
-const typed = new Typed('.multiple-text', {
-    strings: ['Frontend Developer','Backend Developer','GUI Developer','javascript Developer'],
-    typeSpeed: 100,
-    backSpeed: 100,
-    backDelay: 1000,
-    loop: true
+window.addEventListener("scroll", () => {
+  header.classList.toggle("sticky", window.scrollY > 80);
+});
+
+/* =========================
+   ACTIVE NAVIGATION
+========================= */
+
+const sections = document.querySelectorAll("section");
+
+window.addEventListener("scroll", () => {
+  let current = "";
+
+  sections.forEach((section) => {
+    const sectionTop = section.offsetTop - 200;
+
+    const sectionHeight = section.offsetHeight;
+
+    const sectionId = section.getAttribute("id");
+
+    if (
+      window.scrollY >= sectionTop &&
+      window.scrollY < sectionTop + sectionHeight
+    ) {
+      current = sectionId;
+    }
+  });
+
+  navLinks.forEach((link) => {
+    link.classList.remove("active");
+
+    if (link.getAttribute("href") === `#${current}`) {
+      link.classList.add("active");
+    }
+  });
+});
+
+/* =========================
+   TYPED JS
+========================= */
+
+const typed = new Typed(".multiple-text", {
+  strings: [
+    "Frontend Developer",
+    "React Developer",
+    "Backend Developer",
+    "Full Stack Developer",
+  ],
+
+  typeSpeed: 80,
+
+  backSpeed: 50,
+
+  backDelay: 1500,
+
+  loop: true,
+});
+
+/* =========================
+   SMOOTH NAV EFFECT
+========================= */
+
+document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+  anchor.addEventListener("click", function (event) {
+    const target = document.querySelector(this.getAttribute("href"));
+
+    if (target) {
+      event.preventDefault();
+
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  });
 });
